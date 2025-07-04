@@ -1,0 +1,20 @@
+name: Build and publish release
+on: [workflow_dispatch]
+jobs:
+  Release:
+    runs-on: windows-2022
+    steps:
+      - name: Obtain Meson
+        run: pipx install meson==1.8.2
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Initialize build directory and fetch AdbWinApi source
+        run: python initialize_build_template.py build_source
+      - name: Configure builddir
+        run: meson setup build build_source --native-file release_install_native.ini
+      - name: Build AdbWinApi
+        run: meson compile -C build
+      - name: Install AdbWinApi
+        run: meson install -C build --destdir dest\x86_64
+      - name: TODO Show results
+        run: tree
