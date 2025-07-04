@@ -53,7 +53,7 @@ def _fetch_with_progress(
             new_log_delay = time.monotonic()
             if (new_log_delay - log_delay) >= print_delay:
                 log_delay = new_log_delay
-                print(round(fetched_size / 2**20), "MiB", sep="")
+                print(round(fetched_size / 2**20), "MiB", sep="", file=sys.stderr)
 
 
 def _universal_symlink(src, dst) -> None:
@@ -148,7 +148,7 @@ if __name__ == "__main__":
             tmpcache = tempfile.NamedTemporaryFile(
                 dir=cache_dir, prefix="tmp", delete=False
             )
-        print(f"Fetching {url}...")
+        print(f"Fetching {url}...", file=sys.stderr)
         try:
             _fetch_with_progress(url, tmpcache.file)
         except Exception:
