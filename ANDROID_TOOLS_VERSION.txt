@@ -1,0 +1,2 @@
+# Version of android-tools.
+35.0.2

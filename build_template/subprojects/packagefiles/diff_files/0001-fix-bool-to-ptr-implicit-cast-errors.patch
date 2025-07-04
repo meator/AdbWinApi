@@ -1,0 +1,134 @@
+--- a/host/windows/usb/api/adb_api.cpp
++++ b/host/windows/usb/api/adb_api.cpp
+@@ -434,7 +434,7 @@ ADBAPIHANDLE __cdecl AdbWriteEndpointAsync(ADBAPIHANDLE adb_endpoint,
+     return ret;
+   } else {
+     SetLastError(ERROR_INVALID_HANDLE);
+-    return false;
++    return nullptr;
+   }
+ }
+ 
+--- a/host/windows/usb/api/adb_legacy_endpoint_object.cpp
++++ b/host/windows/usb/api/adb_legacy_endpoint_object.cpp
+@@ -53,7 +53,7 @@ ADBAPIHANDLE AdbLegacyEndpointObject::CommonAsyncReadWrite(
+ 
+   if (!IsOpened()) {
+     SetLastError(ERROR_INVALID_HANDLE);
+-    return false;
++    return nullptr;
+   }
+ 
+   bool is_ioctl_write = is_read ? false : (0 != time_out);
+--- a/host/windows/usb/api/adb_legacy_interface.cpp
++++ b/host/windows/usb/api/adb_legacy_interface.cpp
+@@ -67,7 +67,7 @@ ADBAPIHANDLE AdbLegacyInterfaceObject::CreateHandle() {
+   }
+ 
+   if (!ok) {
+-    return false;
++    return nullptr;
+   }
+ 
+   // Save indexes and IDs for bulk read / write endpoints. We will use them to
+@@ -78,7 +78,7 @@ ADBAPIHANDLE AdbLegacyInterfaceObject::CreateHandle() {
+     // Get endpoint information
+     AdbEndpointInformation pipe_info;
+     if (!GetEndpointInformation(endpoint, &pipe_info)) {
+-      return false;
++      return nullptr;
+     }
+ 
+     if (AdbEndpointTypeBulk == pipe_info.endpoint_type) {
+@@ -230,7 +230,7 @@ ADBAPIHANDLE AdbLegacyInterfaceObject::OpenEndpoint(
+       endpoint_index = def_write_endpoint_;
+     } else {
+       SetLastError(ERROR_INVALID_PARAMETER);
+-      return false;
++      return nullptr;
+     }
+   } catch (...) {
+     // We don't expect exceptions other than OOM thrown here.
+@@ -250,7 +250,7 @@ ADBAPIHANDLE AdbLegacyInterfaceObject::OpenEndpoint(
+     AdbOpenSharingMode sharing_mode) {
+   if (!IsOpened()) {
+     SetLastError(ERROR_INVALID_HANDLE);
+-    return false;
++    return nullptr;
+   }
+ 
+   AdbLegacyEndpointObject* adb_endpoint = NULL;
+--- a/host/windows/usb/winusb/adb_winusb_endpoint_object.cpp
++++ b/host/windows/usb/winusb/adb_winusb_endpoint_object.cpp
+@@ -104,7 +104,7 @@ ADBAPIHANDLE AdbWinUsbEndpointObject::CommonAsyncReadWrite(
+   // CommonSyncReadWrite(). This is not yet implemented because there are no
+   // callers to Adb{Read,Write}EndpointAsync() in AOSP, and hence no testing.
+   if (!SetTimeout(time_out))
+-    return false;
++    return nullptr;
+ 
+   // Create completion i/o object
+   AdbIOCompletion* adb_io_completion = NULL;
+--- a/host/windows/usb/winusb/adb_winusb_interface.cpp
++++ b/host/windows/usb/winusb/adb_winusb_interface.cpp
+@@ -69,7 +69,7 @@ ADBAPIHANDLE AdbWinUsbInterfaceObject::CreateHandle() {
+   // Cache current interface number that will be used in
+   // WinUsb_Xxx calls performed on this interface.
+   if (!WinUsb_GetCurrentAlternateSetting(winusb_handle(), &interface_number_))
+-    return false;
++    return nullptr;
+ 
+   // Cache interface properties
+   unsigned long bytes_written;
+@@ -78,7 +78,7 @@ ADBAPIHANDLE AdbWinUsbInterfaceObject::CreateHandle() {
+   if (!WinUsb_GetDescriptor(winusb_handle(), USB_DEVICE_DESCRIPTOR_TYPE, 0, 0,
+                             reinterpret_cast<PUCHAR>(&usb_device_descriptor_),
+                             sizeof(usb_device_descriptor_), &bytes_written)) {
+-    return false;
++    return nullptr;
+   }
+ 
+   // Cache USB configuration descriptor
+@@ -86,13 +86,13 @@ ADBAPIHANDLE AdbWinUsbInterfaceObject::CreateHandle() {
+                             0, 0,
+                             reinterpret_cast<PUCHAR>(&usb_config_descriptor_),
+                             sizeof(usb_config_descriptor_), &bytes_written)) {
+-    return false;
++    return nullptr;
+   }
+ 
+   // Cache USB interface descriptor
+   if (!WinUsb_QueryInterfaceSettings(winusb_handle(), interface_number(),
+                                      &usb_interface_descriptor_)) {
+-    return false;
++    return nullptr;
+   }
+ 
+   // Save indexes and IDs for bulk read / write endpoints. We will use them to
+@@ -104,7 +104,7 @@ ADBAPIHANDLE AdbWinUsbInterfaceObject::CreateHandle() {
+     WINUSB_PIPE_INFORMATION pipe_info;
+     if (!WinUsb_QueryPipe(winusb_handle(), interface_number(), endpoint,
+                           &pipe_info)) {
+-      return false;
++      return nullptr;
+     }
+ 
+     if (UsbdPipeTypeBulk == pipe_info.PipeType) {
+@@ -309,7 +309,7 @@ ADBAPIHANDLE AdbWinUsbInterfaceObject::OpenEndpoint(
+     endpoint_index = def_write_endpoint_;
+   } else {
+     SetLastError(ERROR_INVALID_PARAMETER);
+-    return false;
++    return nullptr;
+   }
+ 
+   return OpenEndpoint(endpoint_id, endpoint_index);
+@@ -319,7 +319,7 @@ ADBAPIHANDLE AdbWinUsbInterfaceObject::OpenEndpoint(UCHAR endpoint_id,
+                                                     UCHAR endpoint_index) {
+   if (!IsOpened()) {
+     SetLastError(ERROR_INVALID_HANDLE);
+-    return false;
++    return nullptr;
+   }
+ 
+   AdbEndpointObject* adb_endpoint = NULL;

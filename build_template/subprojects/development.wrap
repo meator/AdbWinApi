@@ -1,0 +1,9 @@
+[wrap-file]
+directory = development-${version}
+
+source_filename = platform-tools-${version}.tar.gz
+lead_directory_missing = true
+
+patch_directory = patch/
+
+diff_files = diff_files/0001-fix-bool-to-ptr-implicit-cast-errors.patch, diff_files/0002-fix-build.patch
