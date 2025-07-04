@@ -10,6 +10,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Initialize build directory and fetch AdbWinApi source
         run: python initialize_build_template.py build_source
+      - name: Setup MSVC build environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
       - name: Configure builddir
         run: meson setup build build_source --native-file release_install_native.ini
       - name: Build AdbWinApi
