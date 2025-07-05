@@ -17,6 +17,10 @@ jobs:
       # - name: Install Meson
       #   run: pipx install meson==$env:meson_version
       - uses: actions/checkout@v4
+      - name: Fetch the target tag
+        env:
+          GITHUB_REF: ${{ github.ref }}
+        run: git fetch "$GITHUB_REF"
       - name: Test
         env:
           GITHUB_REF: ${{ github.ref }}
