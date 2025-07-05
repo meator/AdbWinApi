@@ -5,6 +5,9 @@ on:
     tags:
       - '*'
 
+env:
+  meson_version: 1.8.2
+
 jobs:
   Release:
     runs-on: windows-2022
@@ -12,7 +15,7 @@ jobs:
       contents: write
     steps:
       - name: Install Meson
-        run: pipx install meson==1.8.2
+        run: pipx install meson==$meson_version
       - uses: actions/checkout@v4
       - name: Load project and android-tools versions
         shell: bash
@@ -97,6 +100,7 @@ jobs:
             head -n1 msvc_x86.txt
             printf "ARM64 MSVC version: "
             head -n1 msvc_aarch64.txt
+            printf "Meson version: $meson_version\n"
             echo '```'
           } > MESSAGE
 
