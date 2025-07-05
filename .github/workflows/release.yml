@@ -82,7 +82,7 @@ jobs:
         run: |
           {
             git tag -l --format='%(contents:body)' ${{ github.ref }}
-            printf '---\n\n```\n'
+            printf %b '---\n\n```\n'
             printf "Windows version: "
             cmd.exe /c ver
             printf "x86-64 MSVC version: "
