@@ -8,17 +8,21 @@ jobs:
         run: pipx install meson==1.8.2
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Get AdbWinApi version
+        run: |
+          $content = Get-Content -Raw -Path "VERSION.txt"
+          Add-Content -Path $env:GITHUB_ENV -Value "PROJECT_VERSION=$content"
       - name: Initialize build directory and fetch AdbWinApi source
         run: python initialize_build_template.py build_source
       - name: Setup MSVC build environment
-        uses: ilammy/msvc-dev-cmd@v1
+        uses: ilammy/msvc-dev-cmd@v1.13.0
         with:
           arch: x64
       - name: Configure builddir
-        run: meson setup build build_source --native-file release_install_native.ini
+        run: meson setup build build_source --native-file release_install_native.ini --destdir 
       - name: Build AdbWinApi
         run: meson compile -C build
       - name: Install AdbWinApi
-        run: meson install -C build --destdir dest\x86_64
+        run: meson install -C build --destdir AdbWinApi-$env:PROJECT_VERSION\x86_64
       - name: TODO Show results
         run: tree
