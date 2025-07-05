@@ -14,15 +14,28 @@ jobs:
           Add-Content -Path $env:GITHUB_ENV -Value "PROJECT_VERSION=$content"
       - name: Initialize build directory and fetch AdbWinApi source
         run: python initialize_build_template.py build_source
-      - name: Setup MSVC build environment
+      - name: Setup MSVC build environment (x86-64 64bit)
         uses: ilammy/msvc-dev-cmd@v1.13.0
         with:
           arch: x64
-      - name: Configure builddir
-        run: meson setup build build_source --native-file release_install_native.ini
-      - name: Build AdbWinApi
-        run: meson compile -C build
-      - name: Install AdbWinApi
-        run: meson install -C build --destdir AdbWinApi-$env:PROJECT_VERSION\x86_64
+      - name: Configure builddir (x86-64 64bit)
+        run: meson setup build-x86-64 build_source --native-file release_install_native.ini
+      - name: Build AdbWinApi (x86-64 64bit)
+        run: meson compile -C build-x86-64
+      - name: Install AdbWinApi (x86-64 64bit)
+        run: meson install -C build-x86-64 --destdir AdbWinApi-$env:PROJECT_VERSION\x86_64
       - name: TODO Show results
-        run: tree
+        run: tree AdbWinApi-$env:PROJECT_VERSION
+
+      - name: Setup MSVC build environment (x86 32bit)
+        uses: ilammy/msvc-dev-cmd@v1.13.0
+        with:
+          arch: x86
+      - name: Configure builddir (x86 32bit)
+        run: meson setup build-x86 build_source --cross-file 'crossfiles\x86 (32bit).ini' --cross-file release_install_native.ini
+      - name: Build AdbWinApi (x86 32bit)
+        run: meson compile -C build-x86
+      - name: Install AdbWinApi (x86 32bit)
+        run: meson install -C build-x86 --destdir AdbWinApi-$env:PROJECT_VERSION\x86
+      - name: TODO Show results
+        run: tree AdbWinApi-$env:PROJECT_VERSION
