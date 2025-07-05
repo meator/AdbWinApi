@@ -16,17 +16,10 @@ import urllib.request
 source_archive_url = "https://android.googlesource.com/platform/development.git/+archive/platform-tools-%(version)s.tar.gz"
 
 
-def _read_file_with_comments(to_read: typing.TextIO) -> str:
-    """Read a file while ignoring # comments.
+script_dir = pathlib.Path(__file__).parent
+sys.path.insert(1, script_dir.absolute())
 
-    This function doesn't expect to receive multiline files (excluding the comments).
-    """
-    result = ""
-    for line in to_read:
-        if len(line) >= 1 and line[0] == "#":
-            continue
-        result += line
-    return result.strip()
+import _strip_comments
 
 
 def _fetch_with_progress(
@@ -91,7 +84,6 @@ if __name__ == "__main__":
 
     # Argument validation and processing.
 
-    script_dir = pathlib.Path(__file__).parent
     dest_dir = pathlib.Path(args.destination_directory)
 
     if args.android_tools_version:
@@ -107,7 +99,7 @@ if __name__ == "__main__":
         android_tools_version = args.android_tools_version
     else:
         with open(script_dir / "ANDROID_TOOLS_VERSION.txt", "r") as file:
-            android_tools_version = _read_file_with_comments(file)
+            android_tools_version = _strip_comments.read_file_with_comments(file)
 
     # Fetch source into cache/ if not cached already.
 
