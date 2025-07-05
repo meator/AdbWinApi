@@ -63,7 +63,7 @@ jobs:
       - name: Initialize wrap build template
         run: python initialize_wrap_build_template.py AdbWinApi-$env:PROJECT_VERSION
       - name: Create release archive
-        run: tar -xf AdbWinApi-$env:PROJECT_VERSION.tar.gz AdbWinApi-$env:PROJECT_VERSION
+        run: tar -cf AdbWinApi-$env:PROJECT_VERSION.tar.gz AdbWinApi-$env:PROJECT_VERSION
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
