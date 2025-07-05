@@ -16,11 +16,10 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Get AdbWinApi and development version
+        shell: bash
         run: |
-          $project_ver = Get-Content -Raw -Path "VERSION.txt"
-          $development_ver = python _strip_comments.py "ANDROID_TOOLS_VERSION.txt"
-          Add-Content -Path $env:GITHUB_ENV -Value "PROJECT_VERSION=$project_ver"
-          Add-Content -Path $env:GITHUB_ENV -Value "ARCHIVE_VERSION=$development_ver"
+          echo "PROJECT_VERSION=$(cat VERSION.txt)" >> $GITHUB_ENV
+          echo "ARCHIVE_VERSION=$(python _strip_comments.py ANDROID_TOOLS_VERSION.txt)" >> $GITHUB_ENV
       - name: Cache development archive
         uses: actions/cache@v4
         with:
@@ -83,11 +82,12 @@ jobs:
         run: |
           {
             git tag -l --format='%(contents:body)' ${{ github.ref }}
-            cat <<-EOL
+            cat <<-EOF
             ---
 
             ```
-            Windows version: EOL
+            EOF
+            printf "Windows version: "
             cmd.exe /c ver
             printf "x86-64 MSVC version: "
             head -n1 msvc_x86.txt
