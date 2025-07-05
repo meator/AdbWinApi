@@ -8,10 +8,17 @@ jobs:
         run: pipx install meson==1.8.2
       - name: Check out repository code
         uses: actions/checkout@v4
-      - name: Get AdbWinApi version
+      - name: Get AdbWinApi and development version
         run: |
-          $content = Get-Content -Raw -Path "VERSION.txt"
-          Add-Content -Path $env:GITHUB_ENV -Value "PROJECT_VERSION=$content"
+          $project_ver = Get-Content -Raw -Path "VERSION.txt"
+          $development_ver = Get-Content -Raw -Path "ANDROID_TOOLS_VERSION.txt"
+          Add-Content -Path $env:GITHUB_ENV -Value "PROJECT_VERSION=$project_ver"
+          Add-Content -Path $env:GITHUB_ENV -Value "ARCHIVE_VERSION=$development_ver"
+      - name: Cache development archive
+        uses: actions/cache@v4
+        with:
+          path: cache\platform-tools-${{ env.ARCHIVE_VERSION }}.tar.gz
+          key: platform-tools-${{ env.ARCHIVE_VERSION }}
       - name: Initialize build directory and fetch AdbWinApi source
         run: python initialize_build_template.py build_source
       - name: Setup MSVC build environment (x86-64 64bit)
@@ -20,6 +27,7 @@ jobs:
           arch: x64
       - name: Configure builddir (x86-64 64bit)
         run: meson setup build-x86-64 build_source --native-file release_install_native.ini
+
       - name: Build AdbWinApi (x86-64 64bit)
         run: meson compile -C build-x86-64
       - name: Install AdbWinApi (x86-64 64bit)
