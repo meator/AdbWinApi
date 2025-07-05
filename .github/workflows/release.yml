@@ -11,7 +11,7 @@ jobs:
       - name: Get AdbWinApi and development version
         run: |
           $project_ver = Get-Content -Raw -Path "VERSION.txt"
-          $development_ver = Get-Content -Raw -Path "ANDROID_TOOLS_VERSION.txt"
+          $development_ver = python _strip_comments.py "ANDROID_TOOLS_VERSION.txt"
           Add-Content -Path $env:GITHUB_ENV -Value "PROJECT_VERSION=$project_ver"
           Add-Content -Path $env:GITHUB_ENV -Value "ARCHIVE_VERSION=$development_ver"
       - name: Cache development archive
