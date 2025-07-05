@@ -69,6 +69,9 @@ jobs:
         run: tar -cf AdbWinApi-$env:PROJECT_VERSION.tar.gz AdbWinApi-$env:PROJECT_VERSION
       - name: Generate wrap file
         run: python generate_wrap_file.py AdbWinApi-$env:PROJECT_VERSION.tar.gz AdbWinApi.wrap
+      - name: Generate SHA256SUM.txt
+        shell: bash
+        run: sha256sum --binary AdbWinApi-$PROJECT_VERSION.tar.gz AdbWinApi.wrap > SHA256SUM.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -76,3 +79,4 @@ jobs:
           files: |
             AdbWinApi-${{ env.PROJECT_VERSION }}.tar.gz
             AdbWinApi.wrap
+            SHA256SUM.txt
