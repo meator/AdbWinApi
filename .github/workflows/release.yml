@@ -33,6 +33,7 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1.13.0
         with:
           arch: x64
+      - run: cl | Select-Object -First 1 > msvc_x86-64.txt
       - name: Configure builddir (x86-64 64bit)
         run: meson setup build-x86-64 build_source --native-file release_install_native.ini
       - name: Build AdbWinApi (x86-64 64bit)
