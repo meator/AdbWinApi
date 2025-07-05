@@ -33,7 +33,8 @@ jobs:
         with:
           arch: x64
       - name: Get MSVC compiler version (x86-64 64bit)
-        run: cl > msvc_x86-64.txt
+        shell: bash
+        run: cl 2> msvc_x86-64.txt
       - name: Configure builddir (x86-64 64bit)
         run: meson setup build-x86-64 build_source --native-file release_install_native.ini
       - name: Build AdbWinApi (x86-64 64bit)
@@ -46,7 +47,8 @@ jobs:
         with:
           arch: x86
       - name: Get MSVC compiler version (x86 32bit)
-        run: cl > msvc_x86.txt
+        shell: bash
+        run: cl 2> msvc_x86.txt
       - name: Configure builddir (x86 32bit)
         run: meson setup build-x86 build_source --cross-file 'crossfiles\x86 (32bit).ini' --cross-file release_install_native.ini
       - name: Build AdbWinApi (x86 32bit)
@@ -59,7 +61,8 @@ jobs:
         with:
           arch: amd64_arm64
       - name: Get MSVC compiler version (ARM64 aarch64)
-        run: cl > msvc_aarch64.txt
+        shell: bash
+        run: cl 2> msvc_aarch64.txt
       - name: Configure builddir (ARM64 aarch64)
         run: meson setup build-aarch64 build_source --cross-file 'crossfiles\ARM64 (aarch64).ini' --cross-file release_install_native.ini
       - name: Build AdbWinApi (ARM64 aarch64)
@@ -84,7 +87,7 @@ jobs:
             git tag -l --format='%(contents:body)' ${{ github.ref }}
             printf %b '---\n\n```\n'
             printf "Windows version: "
-            cmd.exe /c ver
+            cmd.exe /c ver | head -n1
             printf "x86-64 MSVC version: "
             head -n1 msvc_x86-64.txt
             printf "x86 MSVC version: "
