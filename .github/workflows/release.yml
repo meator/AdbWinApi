@@ -15,7 +15,7 @@ jobs:
       contents: write
     steps:
       - name: Install Meson
-        run: pipx install meson==$meson_version
+        run: pipx install meson==$env:meson_version
       - uses: actions/checkout@v4
       - name: Load project and android-tools versions
         shell: bash
