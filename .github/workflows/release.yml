@@ -31,7 +31,7 @@ jobs:
       - name: Build AdbWinApi (x86-64 64bit)
         run: meson compile -C build-x86-64
       - name: Install AdbWinApi (x86-64 64bit)
-        run: meson install -C build-x86-64 --destdir AdbWinApi-$env:PROJECT_VERSION\x86_64
+        run: meson install -C build-x86-64 --destdir "$($PWD.Path)\AdbWinApi-$env:PROJECT_VERSION\x86_64"
 
       - name: Setup MSVC build environment (x86 32bit)
         uses: ilammy/msvc-dev-cmd@v1.13.0
@@ -42,7 +42,7 @@ jobs:
       - name: Build AdbWinApi (x86 32bit)
         run: meson compile -C build-x86
       - name: Install AdbWinApi (x86 32bit)
-        run: meson install -C build-x86 --destdir AdbWinApi-$env:PROJECT_VERSION\x86
+        run: meson install -C build-x86 --destdir "$($PWD.Path)\AdbWinApi-$env:PROJECT_VERSION\x86"
 
       - name: Setup MSVC build environment (ARM64 aarch64)
         uses: ilammy/msvc-dev-cmd@v1.13.0
@@ -53,7 +53,7 @@ jobs:
       - name: Build AdbWinApi (ARM64 aarch64)
         run: meson compile -C build-aarch64
       - name: Install AdbWinApi (ARM64 aarch64)
-        run: meson install -C build-aarch64 --destdir AdbWinApi-$env:PROJECT_VERSION\aarch64
+        run: meson install -C build-aarch64 --destdir "$($PWD.Path)\AdbWinApi-$env:PROJECT_VERSION\aarch64"
 
       - name: Initialize wrap build template
         run: python initialize_wrap_build_template.py AdbWinApi-$env:PROJECT_VERSION
