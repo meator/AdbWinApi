@@ -103,8 +103,7 @@ Here is a diagram describing the build process during release deployment:
 > [!NOTE]
 > If you do not have commit access to this repository (i.e. you are not
 > [meator](https://github.com/meator)), these instructions likely won't mean
-> a lot to you. But they may still be interesting if you want to test
-> reproducibility and know the origin of the prebuilt files.
+> a lot to you.
 
 1. Update `VERSION.txt` and `ANDROID_TOOLS_VERSION.txt`
 2. Commit it signed with key `0x7B0F58A5E0F1A2EA11578A731A14CB3464CBE5BF`.
