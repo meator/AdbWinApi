@@ -118,8 +118,6 @@ Here is a diagram describing the build process during release deployment:
    git tag <VERSION.txt contents> -a -s
    ```
 
-   The tag title is `<new VERSION.txt contents>`
-
    The tag description is identical to the commit description.
 4. Push the tag to `meator/AdbWinApi`
 5. Download `SHA256SUM.txt` release artifact
