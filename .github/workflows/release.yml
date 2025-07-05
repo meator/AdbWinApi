@@ -82,12 +82,13 @@ jobs:
         shell: bash
         run: |
           {
-            cmd.exe /c ver
+            git tag -l --format='%(contents:body)' ${{ github.ref }}
             cat <<-EOL
             ---
 
             ```
             Windows version: EOL
+            cmd.exe /c ver
             printf "x86-64 MSVC version: "
             head -n1 msvc_x86.txt
             printf "x86 MSVC version: "
