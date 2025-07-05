@@ -54,3 +54,11 @@ jobs:
         run: meson compile -C build-aarch64
       - name: Install AdbWinApi (ARM64 aarch64)
         run: meson install -C build-aarch64 --destdir AdbWinApi-$env:PROJECT_VERSION\aarch64
+
+      - name: Initialize wrap build template
+        run: python initialize_wrap_build_template.py AdbWinApi-$env:PROJECT_VERSION
+      - name: Upload artifact TODO
+        uses: actions/upload-artifact@v4
+        with:
+          name: test
+          path: AdbWinApi-${{ env.PROJECT_VERSION }}
