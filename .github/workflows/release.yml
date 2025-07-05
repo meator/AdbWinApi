@@ -1,5 +1,10 @@
 name: Build and publish release
-on: [workflow_dispatch]
+
+on:
+  push:
+    tags:
+      - '*'
+
 jobs:
   Release:
     runs-on: windows-2022
@@ -57,8 +62,10 @@ jobs:
 
       - name: Initialize wrap build template
         run: python initialize_wrap_build_template.py AdbWinApi-$env:PROJECT_VERSION
-      - name: Upload artifact TODO
-        uses: actions/upload-artifact@v4
+      - name: Create release archive
+        run: tar -xf AdbWinApi-$env:PROJECT_VERSION.tar.gz AdbWinApi-$env:PROJECT_VERSION
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: test
-          path: AdbWinApi-${{ env.PROJECT_VERSION }}
+          files: AdbWinApi-${{ env.PROJECT_VERSION }}.tar.gz
