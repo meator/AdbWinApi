@@ -60,5 +60,5 @@ if __name__ == "__main__":
 
     # Write the result into destination directory.
 
-    with open(args.project_version, "w") as file:
+    with open(args.output_file, "w") as file:
         file.write(project_version)
