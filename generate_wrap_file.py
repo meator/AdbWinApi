@@ -37,7 +37,6 @@ if __name__ == "__main__":
     # Argument validation and processing.
 
     script_dir = pathlib.Path(__file__).parent
-    dest_dir = pathlib.Path(args.destination_directory)
 
     if args.project_version:
         project_version = args.project_version
