@@ -97,7 +97,7 @@ Examples:
 ## Deployment process
 Here is a diagram describing the build process during release deployment:
 
-![diagram](etc/Build and deployment process.svg)
+![diagram](./etc/Build and deployment process.svg)
 
 ## Release procedure
 > [!NOTE]
