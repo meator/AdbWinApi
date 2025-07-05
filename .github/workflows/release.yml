@@ -85,7 +85,7 @@ jobs:
           GITHUB_REF: ${{ github.ref }}
         run: |
           {
-            git tag -l --format='%(contents:body)' "$GITHUB_REF"
+            git for-each-ref --format='%(contents:body)' "$GITHUB_REF"
             printf %b '---\n\n'
             printf "Here is a brief summary of the build environment used to build the libraries:\n"
             printf '```\n'
