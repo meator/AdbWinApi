@@ -33,7 +33,8 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1.13.0
         with:
           arch: x64
-      - run: cl | Select-Object -First 1 > msvc_x86-64.txt
+      - name: Get MSVC compiler version (x86-64 64bit)
+        run: cl > msvc_x86-64.txt
       - name: Configure builddir (x86-64 64bit)
         run: meson setup build-x86-64 build_source --native-file release_install_native.ini
       - name: Build AdbWinApi (x86-64 64bit)
@@ -45,6 +46,8 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1.13.0
         with:
           arch: x86
+      - name: Get MSVC compiler version (x86 32bit)
+        run: cl > msvc_x86.txt
       - name: Configure builddir (x86 32bit)
         run: meson setup build-x86 build_source --cross-file 'crossfiles\x86 (32bit).ini' --cross-file release_install_native.ini
       - name: Build AdbWinApi (x86 32bit)
@@ -56,6 +59,8 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1.13.0
         with:
           arch: amd64_arm64
+      - name: Get MSVC compiler version (ARM64 aarch64)
+        run: cl > msvc_aarch64.txt
       - name: Configure builddir (ARM64 aarch64)
         run: meson setup build-aarch64 build_source --cross-file 'crossfiles\ARM64 (aarch64).ini' --cross-file release_install_native.ini
       - name: Build AdbWinApi (ARM64 aarch64)
@@ -73,9 +78,29 @@ jobs:
         shell: bash
         run: sha256sum --binary AdbWinApi-$PROJECT_VERSION.tar.gz AdbWinApi.wrap > SHA256SUM.txt
 
+      - name: Generate release message
+        shell: bash
+        run: |
+          {
+            cmd.exe /c ver
+            cat <<-EOL
+            ---
+
+            ```
+            Windows version: EOL
+            printf "x86-64 MSVC version: "
+            head -n1 msvc_x86.txt
+            printf "x86 MSVC version: "
+            head -n1 msvc_x64.txt
+            printf "ARM64 MSVC version: "
+            head -n1 msvc_aarch64.txt
+            echo '```'
+          } > MESSAGE
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          body_path: MESSAGE
           files: |
             AdbWinApi-${{ env.PROJECT_VERSION }}.tar.gz
             AdbWinApi.wrap
