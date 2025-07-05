@@ -14,16 +14,17 @@ jobs:
     permissions:
       contents: write
     steps:
+      # - name: Install Meson
+      #   run: pipx install meson==$env:meson_version
+      - uses: actions/checkout@v4
       - name: Test
         env:
           GITHUB_REF: ${{ github.ref }}
+        shell: bash
         run: git for-each-ref --format='%(contents:body)' "$GITHUB_REF"
       - name: Test 2
+        shell: bash
         run: false
-        
-      - name: Install Meson
-        run: pipx install meson==$env:meson_version
-      - uses: actions/checkout@v4
       - name: Load project and android-tools versions
         shell: bash
         run: |
