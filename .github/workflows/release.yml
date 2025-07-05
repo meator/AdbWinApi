@@ -19,7 +19,7 @@ jobs:
         with:
           arch: x64
       - name: Configure builddir
-        run: meson setup build build_source --native-file release_install_native.ini --destdir 
+        run: meson setup build build_source --native-file release_install_native.ini
       - name: Build AdbWinApi
         run: meson compile -C build
       - name: Install AdbWinApi
