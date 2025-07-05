@@ -33,7 +33,7 @@ jobs:
           arch: x64
       - name: Get MSVC compiler version (x86-64 64bit)
         shell: bash
-        run: cl 2> msvc_x86-64.txt
+        run: cl 2> msvc_x86-64.txt > /dev/null
       - name: Configure builddir (x86-64 64bit)
         run: meson setup build-x86-64 build_source --native-file release_install_native.ini
       - name: Build AdbWinApi (x86-64 64bit)
@@ -47,7 +47,7 @@ jobs:
           arch: x86
       - name: Get MSVC compiler version (x86 32bit)
         shell: bash
-        run: cl 2> msvc_x86.txt
+        run: cl 2> msvc_x86.txt > /dev/null
       - name: Configure builddir (x86 32bit)
         run: meson setup build-x86 build_source --cross-file 'crossfiles\x86 (32bit).ini' --cross-file release_install_native.ini
       - name: Build AdbWinApi (x86 32bit)
@@ -61,7 +61,7 @@ jobs:
           arch: amd64_arm64
       - name: Get MSVC compiler version (ARM64 aarch64)
         shell: bash
-        run: cl 2> msvc_aarch64.txt
+        run: cl 2> msvc_aarch64.txt > /dev/null
       - name: Configure builddir (ARM64 aarch64)
         run: meson setup build-aarch64 build_source --cross-file 'crossfiles\ARM64 (aarch64).ini' --cross-file release_install_native.ini
       - name: Build AdbWinApi (ARM64 aarch64)
