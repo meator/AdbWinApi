@@ -21,6 +21,9 @@ jobs:
         run: git fetch --force origin tag "${GITHUB_REF##*/}"
       - name: Test
         shell: bash
+        run: echo "$GITHUB_REF" "$GITHUB_HEAD_REF"
+      - name: Test
+        shell: bash
         run: git for-each-ref --format='%(contents:body)' "$GITHUB_REF"
       - name: Test 2
         shell: bash
