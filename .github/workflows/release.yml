@@ -17,11 +17,11 @@ jobs:
       # - name: Install Meson
       #   run: pipx install meson==$env:meson_version
       - uses: actions/checkout@v4
-      - name: Fetch the target tag
-        run: git fetch --force origin tag "${GITHUB_REF##*/}"
       - name: Test
         shell: bash
         run: echo "$GITHUB_REF" "$GITHUB_HEAD_REF"
+      - name: Fetch the target tag
+        run: git fetch --force origin tag "${GITHUB_REF##*/}"
       - name: Test
         shell: bash
         run: git for-each-ref --format='%(contents:body)' "$GITHUB_REF"
