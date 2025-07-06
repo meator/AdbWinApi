@@ -20,7 +20,7 @@ jobs:
       - name: Fetch the target tag
         env:
           GITHUB_REF: ${{ github.ref }}
-        run: git fetch "${GITHUB_REF#refs/tags/}"
+        run: git fetch --force tag "${GITHUB_REF##*/}"
       - name: Test
         env:
           GITHUB_REF: ${{ github.ref }}
