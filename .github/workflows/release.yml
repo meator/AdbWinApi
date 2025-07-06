@@ -21,6 +21,7 @@ jobs:
         shell: bash
         run: echo git fetch --force origin "refs/tags/${GITHUB_REF##*/}:refs/tags/${GITHUB_REF##*/}"
       - name: Fetch the target tag
+        shell: bash
         run: git fetch --force origin "refs/tags/${GITHUB_REF##*/}:refs/tags/${GITHUB_REF##*/}"
       - name: Test
         shell: bash
