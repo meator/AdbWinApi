@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Test
         shell: bash
-        run: echo "$GITHUB_REF" "$GITHUB_HEAD_REF"
+        run: echo git fetch --force origin tag "${GITHUB_REF##*/}"
       - name: Fetch the target tag
         run: git fetch --force origin tag "${GITHUB_REF##*/}"
       - name: Test
