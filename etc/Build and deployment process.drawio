@@ -29,7 +29,7 @@
         <mxCell id="5IOgpOtYKzdcHkM1CQEa-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="5IOgpOtYKzdcHkM1CQEa-6" target="5IOgpOtYKzdcHkM1CQEa-13" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5IOgpOtYKzdcHkM1CQEa-6" value="copy&amp;nbsp;&lt;code&gt;build_template/&lt;/code&gt;&lt;div&gt;to target directory&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;" parent="1" vertex="1">
+        <mxCell id="5IOgpOtYKzdcHkM1CQEa-6" value="copy&amp;nbsp;&lt;code&gt;build_template\&lt;/code&gt;&lt;div&gt;to target directory&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;" parent="1" vertex="1">
           <mxGeometry x="300" y="240" width="160" height="40" as="geometry" />
         </mxCell>
         <mxCell id="5IOgpOtYKzdcHkM1CQEa-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="5IOgpOtYKzdcHkM1CQEa-9" target="5IOgpOtYKzdcHkM1CQEa-10" edge="1">
@@ -37,7 +37,7 @@
         </mxCell>
         <mxCell id="5IOgpOtYKzdcHkM1CQEa-12" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="5IOgpOtYKzdcHkM1CQEa-11" vertex="1" connectable="0">
           <mxGeometry x="0.0667" relative="1" as="geometry">
-            <mxPoint x="10" y="-1" as="offset" />
+            <mxPoint x="10" y="-3" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="5IOgpOtYKzdcHkM1CQEa-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="5IOgpOtYKzdcHkM1CQEa-9" target="5IOgpOtYKzdcHkM1CQEa-6" edge="1">
@@ -54,8 +54,8 @@
         <mxCell id="5IOgpOtYKzdcHkM1CQEa-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="5IOgpOtYKzdcHkM1CQEa-10" target="5IOgpOtYKzdcHkM1CQEa-6" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5IOgpOtYKzdcHkM1CQEa-10" value="fetch it" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=12 12;" parent="1" vertex="1">
-          <mxGeometry x="345" y="190" width="70" height="25" as="geometry" />
+        <mxCell id="5IOgpOtYKzdcHkM1CQEa-10" value="fetch it to &lt;code&gt;cache\&lt;/code&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=12 12;" parent="1" vertex="1">
+          <mxGeometry x="325" y="192" width="110" height="25" as="geometry" />
         </mxCell>
         <mxCell id="5IOgpOtYKzdcHkM1CQEa-13" value="link/copy release archive from &lt;code&gt;cache\&lt;/code&gt; to&lt;div&gt;&lt;code&gt;&amp;lt;target&amp;gt;\subprojects\packagefiles&lt;/code&gt;&lt;/div&gt;&lt;div&gt;as source for internal wrap&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;" parent="1" vertex="1">
           <mxGeometry x="251.25" y="300" width="257.5" height="60" as="geometry" />
@@ -102,7 +102,7 @@
         <mxCell id="5IOgpOtYKzdcHkM1CQEa-44" value="msys2/adbwinapi is built as internal Wrap. The Wrap is set up by &lt;code&gt;initialize_build_template.py&lt;/code&gt;. This is done to make patching in a meson.build file into msys2/adbwinapi easy (the wrap file has a patch directory) and to apply a few patches which fix compilation failure (using Wrap diff files)." style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="11.25" y="200" width="210" height="170" as="geometry" />
         </mxCell>
-        <mxCell id="aQf1hthGNhwgmISeAP8V-1" value="The &quot;real&quot; Meson build system for AdbWinApi and AdbWinUsbApi is located in &lt;code&gt;build_template\subprojects\packagefiles\patch\meson.build&lt;/code&gt;&lt;div&gt;The Wrap build system is located in&lt;/div&gt;&lt;div&gt;&lt;code&gt;wrap_build_template\meson.build&lt;/code&gt;&lt;br&gt;&lt;/div&gt;" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="aQf1hthGNhwgmISeAP8V-1" value="The &quot;real&quot; Meson build system for AdbWinApi and AdbWinUsbApi is located in &lt;code&gt;build_template\subprojects\packagefiles\patch\meson.build&lt;/code&gt;&lt;div&gt;The Wrap build system is located in&lt;/div&gt;&lt;div&gt;&lt;code&gt;wrap_build_template\meson.build&lt;/code&gt;&lt;br&gt;&lt;/div&gt;" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="208" y="480" width="435" height="100" as="geometry" />
         </mxCell>
       </root>
