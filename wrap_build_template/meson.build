@@ -1,4 +1,4 @@
-project('AdbWinApi', version: '${project_version}', 'cpp')
+project('AdbWinApi', 'cpp', version: '${project_version}')
 
 # Do some sanity checking so that meson can fail early instead of at final link time
 if host_machine.system() != 'windows'
@@ -19,7 +19,7 @@ endif
 
 dist_dir = meson.current_source_dir() / host_machine.cpu_family()
 
-cxx = meson.get_compiler('cxx')
+cxx = meson.get_compiler('cpp')
 adbwinapi_dep = declare_dependency(
   dependencies: cxx.find_library('AdbWinApi', dirs: dist_dir),
   version: '${library_version}',
