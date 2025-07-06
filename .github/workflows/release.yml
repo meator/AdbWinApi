@@ -93,15 +93,15 @@ jobs:
             printf %b '---\n\n'
             printf "Here is a brief summary of the build environment used to build the libraries:\n"
             printf '```\n'
-            printf "Windows version: "
+            printf "Windows version:     "
             cmd.exe /c ver | head -n1
             printf "x86-64 MSVC version: "
             head -n1 msvc_x86-64.txt
-            printf "x86 MSVC version: "
+            printf "x86 MSVC version:    "
             head -n1 msvc_x86.txt
-            printf "ARM64 MSVC version: "
+            printf "ARM64 MSVC version:  "
             head -n1 msvc_aarch64.txt
-            printf "Meson version: $meson_version\n"
+            printf "Meson version:       $meson_version\n"
             echo '```'
           } > MESSAGE
 
@@ -109,6 +109,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           body_path: MESSAGE
+          draft: true
           files: |
             AdbWinApi-${{ env.PROJECT_VERSION }}.tar.gz
             AdbWinApi.wrap

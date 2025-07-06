@@ -15,7 +15,8 @@ access to some VC++ components (for example
 [ATL](https://learn.microsoft.com/en-us/cpp/mfc/mfc-and-atl)), whereas the
 rest of android-tools expects a Cygwin compiler.
 
-Dynamic libraries are provided for x86-64 (64bit), x86 (32bit) and ARM64 (aarch64).
+Dynamic libraries are provided for **x86-64 (64bit), x86 (32bit) and ARM64
+(aarch64)**.
 
 The main inspiration for this project is https://github.com/msys2/adbwinapi.
 This repository is a Meson rewrite of its CMake build system. It also provides
@@ -86,7 +87,7 @@ doesn't have a `p` revision suffix, the versions in `ANDROID_TOOLS_VERSION.txt`
 and `VERSION.txt` shall be identical.
 
 Examples:
-- `35.0.2` - both this project and the underlying
+- `35.0.2` - both this project _and_ the underlying
   [platform/development](https://android.googlesource.com/platform/development.git)
   repository have version `35.0.2`
 - `35.0.2p1` - this project has two `35.0.2` releases differentiated by the
