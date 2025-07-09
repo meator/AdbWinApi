@@ -109,7 +109,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           body_path: MESSAGE
-          prerelease: true
+          # prerelease: true
+          # TODO
+          draft: true
           files: |
             AdbWinApi-${{ env.PROJECT_VERSION }}.tar.gz
             AdbWinApi.wrap
