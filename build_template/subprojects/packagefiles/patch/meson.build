@@ -94,11 +94,6 @@ adbwinapi_lib = shared_library(
   install: true,
 )
 
-install_subdir(
-  'host/windows/usb/api',
-  install_dir: get_option('includedir') / 'host/windows/usb/api',
-)
-
 adbwinusbapi_rc = windows.compile_resources(
   'host/windows/usb/winusb/AdbWinUsbApi.rc',
 )
