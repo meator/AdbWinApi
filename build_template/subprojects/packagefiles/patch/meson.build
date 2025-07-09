@@ -11,7 +11,7 @@ project(
 if host_machine.system() != 'windows'
   error(
     'As its name implies, AdbWinApi can be only built for Windows targets!',
-    'It relies on MSVC and on Windows internal libraries.'
+    'It relies on MSVC and on Windows internal libraries.',
   )
 endif
 
@@ -19,7 +19,7 @@ if meson.get_compiler('cpp').get_id() != 'msvc'
   error(
     'ADB API for Windows can only be built using MSVC. This project',
     'depends on ATL, which is difficult to compile without MSVC:',
-    'https://stackoverflow.com/q/57875554'
+    'https://stackoverflow.com/q/57875554',
   )
 endif
 
@@ -33,7 +33,7 @@ CXX = meson.get_compiler('cpp')
 if not CXX.has_header('atlbase.h')
   error(
     'You are missing the ATL optional component of Visual C++.',
-    'See https://learn.microsoft.com/en-us/cpp/mfc/mfc-and-atl'
+    'See https://learn.microsoft.com/en-us/cpp/mfc/mfc-and-atl',
   )
 endif
 
@@ -92,6 +92,11 @@ adbwinapi_lib = shared_library(
   ],
   dependencies: CXX.find_library('setupapi'),
   install: true,
+)
+
+install_subdir(
+  'host/windows/usb/api',
+  install_dir: get_option('includedir') / 'host/windows/usb/api',
 )
 
 adbwinusbapi_rc = windows.compile_resources(
