@@ -22,6 +22,7 @@ dist_dir = meson.current_source_dir() / host_machine.cpu_family()
 cxx = meson.get_compiler('cpp')
 adbwinapi_dep = declare_dependency(
   dependencies: cxx.find_library('AdbWinApi', dirs: dist_dir),
+  include_directories: 'include/host/windows/usb/api',
   version: '${library_version}',
 )
 adbwinusbapi_dep = declare_dependency(
