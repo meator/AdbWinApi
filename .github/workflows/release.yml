@@ -75,6 +75,9 @@ jobs:
       - name: Install AdbWinApi (ARM64 aarch64)
         run: meson install -C build-aarch64 --destdir "$($PWD.Path)\AdbWinApi-$env:PROJECT_VERSION\aarch64"
 
+      - name: Install header files
+        run: Copy-Item -Path build_source\subprojects\development-$env:ARCHIVE_VERSION\host\windows\usb\api -Destination AdbWinApi-$env:PROJECT_VERSION\include\host\windows\usb\api -Recurse
+
       - name: Initialize wrap build template
         run: python initialize_wrap_build_template.py AdbWinApi-$env:PROJECT_VERSION
       - name: Create release archive
