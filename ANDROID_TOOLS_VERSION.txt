@@ -1,0 +1,10 @@
+# Version of android-tools. Not to be confused with
+# version of the project/repository, which is located in
+# VERSION.txt. These two are identical most of the time,
+# but this project may need to release faster than
+# android-tools to fix some bugs for example. When that
+# happens, the version in VERSION.txt will include a
+# p<num> suffix, whereas the version in this file
+# will remain the same (it will still contain the version
+# of android-tools AdbWinApi is targeting).
+35.0.2

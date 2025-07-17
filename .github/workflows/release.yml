@@ -1,0 +1,171 @@
+# Copyright 2025 meator
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Build and publish release
+
+on:
+  push:
+    tags:
+      - '*'
+
+env:
+  meson_version: 1.8.2
+
+jobs:
+  Release:
+    runs-on: windows-2022
+    permissions:
+      contents: write
+    steps:
+      - name: Install Meson
+        run: pipx install meson==$env:meson_version
+      - uses: actions/checkout@v4
+      - name: Fetch the target tag
+        shell: bash
+        run: git fetch --force origin tag "${GITHUB_REF##*/}"
+      - name: Load project and android-tools versions
+        shell: bash
+        run: |
+          echo "PROJECT_VERSION=$(cat VERSION.txt)" >> $GITHUB_ENV
+          echo "ARCHIVE_VERSION=$(python _strip_comments.py ANDROID_TOOLS_VERSION.txt)" >> $GITHUB_ENV
+      - name: Cache development archive
+        uses: actions/cache@v4
+        with:
+          path: cache\platform-tools-${{ env.ARCHIVE_VERSION }}.tar.gz
+          key: platform-tools-${{ env.ARCHIVE_VERSION }}
+      - name: Initialize build directory and fetch AdbWinApi source
+        run: python initialize_build_template.py build_source
+
+      - name: Setup MSVC build environment (x86-64 64bit)
+        uses: ilammy/msvc-dev-cmd@v1.13.0
+        with:
+          arch: x64
+      - name: Get MSVC compiler version (x86-64 64bit)
+        shell: bash
+        run: cl 2> msvc_x86-64.txt > /dev/null
+        # x86_64 is different from the cross targets below.
+        # It is not necessary to install header files three times,
+        # so it is only done in x86_64. This means that the prefix,
+        # destdir and includedir has to be altered.
+      - name: Configure builddir (x86-64 64bit)
+        run: >
+          meson setup build-x86-64 build_source
+          --native-file release_install_native.ini
+          -Ddevelopment:adbwinapi_install_headers=true
+          -Ddevelopment:adbwinapi_install_headers_subdir=""
+          -Dlibdir=x86_64
+          -Dbindir=x86_64
+          -Dincludedir=include\host\windows\usb\api
+      - name: Build AdbWinApi (x86-64 64bit)
+        run: meson compile -C build-x86-64
+      - name: Install AdbWinApi (x86-64 64bit)
+        # Do not destdir x86_64 into its directory, because we need to install include\
+        run: meson install -C build-x86-64 --destdir "$($PWD.Path)\AdbWinApi-$env:PROJECT_VERSION"
+
+      - name: Setup MSVC build environment (x86 32bit)
+        uses: ilammy/msvc-dev-cmd@v1.13.0
+        with:
+          arch: x86
+      - name: Get MSVC compiler version (x86 32bit)
+        shell: bash
+        run: cl 2> msvc_x86.txt > /dev/null
+      - name: Configure builddir (x86 32bit)
+        run: >
+          meson setup build-x86 build_source
+          --cross-file 'crossfiles\x86 (32bit).ini'
+          --cross-file release_install_native.ini
+          -Ddevelopment:adbwinapi_install_headers=false
+      - name: Build AdbWinApi (x86 32bit)
+        run: meson compile -C build-x86
+      - name: Install AdbWinApi (x86 32bit)
+        run: meson install -C build-x86 --destdir "$($PWD.Path)\AdbWinApi-$env:PROJECT_VERSION\x86"
+
+      - name: Setup MSVC build environment (ARM64 aarch64)
+        uses: ilammy/msvc-dev-cmd@v1.13.0
+        with:
+          arch: amd64_arm64
+      - name: Get MSVC compiler version (ARM64 aarch64)
+        shell: bash
+        run: cl 2> msvc_aarch64.txt > /dev/null
+      - name: Configure builddir (ARM64 aarch64)
+        run: >
+          meson setup build-aarch64 build_source
+          --cross-file 'crossfiles\ARM64 (aarch64).ini'
+          --cross-file release_install_native.ini
+          -Ddevelopment:adbwinapi_install_headers=false
+      - name: Build AdbWinApi (ARM64 aarch64)
+        run: meson compile -C build-aarch64
+      - name: Install AdbWinApi (ARM64 aarch64)
+        run: meson install -C build-aarch64 --destdir "$($PWD.Path)\AdbWinApi-$env:PROJECT_VERSION\aarch64"
+
+      - name: Copy license and NOTICE to release directory
+        run: |
+          Copy-Item -Path LICENSE -Destination AdbWinApi-$env:PROJECT_VERSION
+          Copy-Item -Path NOTICE  -Destination AdbWinApi-$env:PROJECT_VERSION
+
+      - name: Setup source archive
+        run: |
+          New-Item -ItemType Directory -Path AdbWinApi-$env:PROJECT_VERSION-src
+          Move-Item -Path build_source\subprojects\development-${env:ARCHIVE_VERSION}\host -Destination AdbWinApi-$env:PROJECT_VERSION-src\host
+          Move-Item -Path build_source\subprojects\development-${env:ARCHIVE_VERSION}\meson.build -Destination AdbWinApi-$env:PROJECT_VERSION-src
+          Move-Item -Path build_source\subprojects\development-${env:ARCHIVE_VERSION}\meson_options.txt -Destination AdbWinApi-$env:PROJECT_VERSION-src
+          Copy-Item -Path LICENSE -Destination AdbWinApi-$env:PROJECT_VERSION-src
+          Copy-Item -Path NOTICE  -Destination AdbWinApi-$env:PROJECT_VERSION-src
+
+      - name: Initialize wrap build template
+        run: python initialize_wrap_build_template.py AdbWinApi-$env:PROJECT_VERSION
+      - name: Create release archive
+        run: Compress-Archive AdbWinApi-$env:PROJECT_VERSION AdbWinApi-$env:PROJECT_VERSION.zip
+      - name: Create source archive
+        run: Compress-Archive AdbWinApi-$env:PROJECT_VERSION-src AdbWinApi-$env:PROJECT_VERSION-src.zip
+      - name: Generate wrap file
+        run: python generate_wrap_file.py AdbWinApi-$env:PROJECT_VERSION.zip AdbWinApi.wrap
+      - name: Convert wrap file to LF from CRLF
+        shell: bash
+        run: dos2unix AdbWinApi.wrap
+      - name: Generate SHA256SUM.txt
+        shell: bash
+        run: sha256sum --binary AdbWinApi-$PROJECT_VERSION.zip AdbWinApi-$PROJECT_VERSION-src.zip AdbWinApi.wrap > SHA256SUM.txt
+
+      - name: Generate release message
+        shell: bash
+        run: |
+          {
+            git for-each-ref --format='%(contents:body)' "$GITHUB_REF"
+            printf %b '---\n\n'
+            printf "Here is a brief summary of the build environment used to build the libraries:\n"
+            printf '```\n'
+            printf "Windows version:     "
+            cmd.exe /c ver | head -n1
+            printf "x86-64 MSVC version: "
+            head -n1 msvc_x86-64.txt
+            printf "x86 MSVC version:    "
+            head -n1 msvc_x86.txt
+            printf "ARM64 MSVC version:  "
+            head -n1 msvc_aarch64.txt
+            printf "Meson version:       $meson_version\n"
+            echo '```'
+          } > MESSAGE
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: MESSAGE
+          # prerelease: true
+          # draft: true
+          files: |
+            AdbWinApi-${{ env.PROJECT_VERSION }}.zip
+            AdbWinApi-${{ env.PROJECT_VERSION }}-src.zip
+            AdbWinApi.wrap
+            SHA256SUM.txt
