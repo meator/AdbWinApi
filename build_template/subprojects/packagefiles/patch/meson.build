@@ -101,7 +101,6 @@ adbwinapi_lib = shared_library(
     '-DWINVER=_WIN32_WINNT_WIN10',
     windll_define,
   ],
-  version: '${version}',
   dependencies: CXX.find_library('setupapi'),
   install: true,
 )
@@ -132,7 +131,6 @@ shared_library(
     windll_define,
   ],
   link_with: adbwinapi_lib,
-  version: '${version}',
   dependencies: CXX.find_library('winusb'),
   install: true,
 )
