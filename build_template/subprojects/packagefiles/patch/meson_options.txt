@@ -25,3 +25,10 @@ option(
   value: 'AdbWinApi',
   description: 'Header file subdir into which header files are installed. Ignored if adbwinapi_install_headers is false. If empty, no subdir is used',
 )
+
+option(
+  'adbwinapi_windows_version',
+  type: 'string',
+  value: '_WIN32_WINNT_WIN10',
+  description: 'Version of Windows to compile for (used in _WIN32_WINNT and WINVER macros).',
+)
