@@ -48,7 +48,8 @@ jobs:
         run: python initialize_build_template.py build_source
 
       - name: Setup MSVC build environment (x86-64 64bit)
-        uses: ilammy/msvc-dev-cmd@v1.13.0
+        # v1.13.0
+        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756
         with:
           arch: x64
       - name: Get MSVC compiler version (x86-64 64bit)
@@ -74,7 +75,8 @@ jobs:
         run: meson install -C build-x86-64 --destdir "$($PWD.Path)\AdbWinApi-$env:PROJECT_VERSION"
 
       - name: Setup MSVC build environment (x86 32bit)
-        uses: ilammy/msvc-dev-cmd@v1.13.0
+        # v1.13.0
+        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756
         with:
           arch: x86
       - name: Get MSVC compiler version (x86 32bit)
@@ -92,7 +94,8 @@ jobs:
         run: meson install -C build-x86 --destdir "$($PWD.Path)\AdbWinApi-$env:PROJECT_VERSION\x86"
 
       - name: Setup MSVC build environment (ARM64 aarch64)
-        uses: ilammy/msvc-dev-cmd@v1.13.0
+        # v1.13.0
+        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756
         with:
           arch: amd64_arm64
       - name: Get MSVC compiler version (ARM64 aarch64)
@@ -159,7 +162,8 @@ jobs:
           } > MESSAGE
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        # v2.3.2
+        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8
         with:
           body_path: MESSAGE
           # prerelease: true
