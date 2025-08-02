@@ -120,7 +120,11 @@ Examples:
 ## Deployment process
 Here is a diagram describing the build process during release deployment:
 
+<div align="center">
+
 ![diagram](./etc/Build%20and%20deployment%20process.svg)
+
+</div>
 
 ## Release procedure
 > [!NOTE]
@@ -164,6 +168,20 @@ I suspect that adapting the currently present GitHub action to use
 the older Windows Driver Kit Version would be either difficult or
 impossible. This would mean that I would have to compile and package
 release artifacts manually, which is less transparent and more error-prone.
+
+## Software Bill of Materials
+This project provides a SBOM for prebuilt release artifacts of releases. This
+SBOM is created manually, if you encounter any issues with it
+or if you wish it would include more info, please [create an
+issue](https://github.com/meator/AdbWinApi/issues/new).
+
+Here is the SBOM creation process:
+
+<div align="center">
+
+![diagram](./etc/SBOM%20creation%20process.svg)
+
+</div>
 
 ## License
 Like [msys2/adbwinapi](https://github.com/msys2/adbwinapi), this repository
