@@ -1,0 +1,86 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" version="28.0.9">
+  <diagram name="Page-1" id="G5-xiO7Yde-p7iUY-BRW">
+    <mxGraphModel dx="872" dy="469" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="GyH0r9SVh068jN-o5E57-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="GyH0r9SVh068jN-o5E57-1" target="GyH0r9SVh068jN-o5E57-10" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-1" value="Setup a Meson builddir with &lt;code&gt;-Ddevelopment:adbwinapi_generate_sbom=true&lt;/code&gt;&lt;div&gt;&lt;code&gt;&lt;hr&gt;&lt;/code&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="80" y="100" width="420" height="370" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;shape=link;" parent="1" source="GyH0r9SVh068jN-o5E57-3" target="GyH0r9SVh068jN-o5E57-4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-3" value="Meson calls &lt;code&gt;&lt;b&gt;generate_sbom.py&lt;/b&gt;&lt;/code&gt; with a lot of arguments supplying the versions of build dependencies and additional information. This info is fetched using the same builddir and as part of the same build process used during the compilation of the libraries themselves, making the SBOM more reliable." style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;" parent="1" vertex="1">
+          <mxGeometry x="210" y="260" width="270" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-4" value="A CycloneDX JSON SBOM tied to the tag version (not to commit hash) is created" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;" parent="1" vertex="1">
+          <mxGeometry x="265" y="400" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.112;exitY=1.007;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;" parent="1" source="GyH0r9SVh068jN-o5E57-7" target="GyH0r9SVh068jN-o5E57-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-9" value="relay info to&lt;div&gt;&lt;code&gt;generate_sbom.py&lt;/code&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="GyH0r9SVh068jN-o5E57-8" vertex="1" connectable="0">
+          <mxGeometry x="-0.2831" y="1" relative="1" as="geometry">
+            <mxPoint x="12" y="41" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-7" value="In a GitHub Actions environment, &lt;code&gt;-Ddevelopment:adbwinapi_sbom_msvc_dev_cmd_ver,&lt;/code&gt;&amp;nbsp;&lt;code&gt;-Ddevelopment:adbwinapi_sbom_action_gh_release&lt;/code&gt; and &lt;code&gt;-Ddevelopment:adbwinapi_github_runner_ver&lt;/code&gt; are additionally set to include the corresponding GitHub Actions and the runner which take part in the release build process in the SBOM" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;" parent="1" vertex="1">
+          <mxGeometry x="90" y="150" width="400" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="GyH0r9SVh068jN-o5E57-10" target="GyH0r9SVh068jN-o5E57-12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-10" value="Create the final release archives in the release creation GitHub Action" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="552.5" y="100" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="GyH0r9SVh068jN-o5E57-12" target="GyH0r9SVh068jN-o5E57-30" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="649" y="410" />
+              <mxPoint x="680" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-12" value="Call&amp;nbsp;&lt;code&gt;finalize_sbom.py&lt;/code&gt; with the previously generated SBOM and the release archive as inputs&lt;div&gt;&lt;hr&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="537.5" y="170" width="222.5" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-22" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" parent="1" source="GyH0r9SVh068jN-o5E57-21" target="GyH0r9SVh068jN-o5E57-4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-21" value="The generated SBOM is fully valid and usable at this stage, but it is not tied to a single release artifact." style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="130" y="480" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-26" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;entryX=0.072;entryY=0.983;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="GyH0r9SVh068jN-o5E57-23" target="GyH0r9SVh068jN-o5E57-12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-23" value="This is called outside of Meson." style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="370" y="480" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="GyH0r9SVh068jN-o5E57-24" target="GyH0r9SVh068jN-o5E57-25" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-24" value="Change the top-level component type from &quot;library&quot; to &quot;file&quot;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;" parent="1" vertex="1">
+          <mxGeometry x="585" y="235" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-25" value="Add URL and hash of the release artifact" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;" parent="1" vertex="1">
+          <mxGeometry x="585" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="GyH0r9SVh068jN-o5E57-30" target="GyH0r9SVh068jN-o5E57-33" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-30" value="Attest the SBOM using&amp;nbsp;&lt;code&gt;actions/attest-sbom&lt;/code&gt; GitHub Action" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="600" y="430" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-33" value="Release the SBOM file alongside the release archive it certifies" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="600" y="510" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GyH0r9SVh068jN-o5E57-35" value="Three SBOMs are created for a single file. This is a bit weird, but the Meson Wrap .tar.gz file includes support for three architectures. Three builddirs are created to make a single release archive. I believe it is sensible to have one SBOM per builddir.&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;The library versions should technically not differ between architectures, but cross compilation can be weird sometimes. This separation also leaves the door open for building each arch natively on a separate host for example. If that happens, having separate SBOMs would be more reasonable.&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;If you do not think this separation is necessary, simply go with the x86_64 SBOM and ignore all other ones. As stated above, the contents of these three should be functionally identical (especially with how the release GitHub Action is set up now).&lt;/div&gt;" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="130" y="580" width="590" height="200" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
