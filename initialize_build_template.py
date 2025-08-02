@@ -254,5 +254,14 @@ if __name__ == "__main__":
         pathlib.Path("subprojects", "packagefiles", "patch", "meson.build"),
         sourcedir=build_template,
         destdir=dest_dir,
-        mapping={"project_version": project_version, "version": android_tools_version},
+        mapping={
+            "project_version": project_version,
+            "version": android_tools_version,
+            "base_path": (
+                str(script_dir)
+                .encode("unicode_escape")
+                .decode("ascii")
+                .replace("'", "\\'")
+            ),
+        },
     )
