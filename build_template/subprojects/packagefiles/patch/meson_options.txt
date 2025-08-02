@@ -32,3 +32,41 @@ option(
   value: '_WIN32_WINNT_WIN10',
   description: 'Version of Windows to compile for (used in _WIN32_WINNT and WINVER macros).',
 )
+
+option(
+  'adbwinapi_generate_sbom',
+  type: 'boolean',
+  value: false,
+  description: 'Generate Software Bill of Materials',
+)
+
+option(
+  'adbwinapi_sbom_name',
+  type: 'string',
+  description: 'Name of the SBOM JSON file.',
+)
+
+option(
+  'adbwinapi_sbom_dir',
+  type: 'string',
+  value: 'share/adbwinapi',
+  description: 'Directory relative to prefix into which the sbom will be installed.',
+)
+
+option(
+  'adbwinapi_github_runner_ver',
+  type: 'string',
+  description: 'The name of the GitHub runner used (including its version). Set this if you are building a SBOM inside a GitHub Action. If unset, this action will be left out of the SBOM.',
+)
+
+option(
+  'adbwinapi_sbom_msvc_dev_cmd_ver',
+  type: 'string',
+  description: 'Version of ilammy/msvc-dev-cmd GitHub Action. Set this if you are building a SBOM inside a GitHub Action. If unset, this action will be left out of the SBOM.',
+)
+
+option(
+  'adbwinapi_sbom_action_gh_release',
+  type: 'string',
+  description: 'Version of softprops/action-gh-release GitHub Action. Set this if you are building a SBOM inside a GitHub Action. If unset, this action will be left out of the SBOM.',
+)

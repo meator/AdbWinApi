@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Be careful when using dollar signs ($$) in the original source for this file
+# (in build_template). This file is passed through Python's string.Template by
+# initialize_build_template.py. Even comments are affected.
+
 project(
   'AdbWinApi',
   'cpp',
@@ -162,4 +166,56 @@ if get_option('adbwinapi_install_headers')
       subdir: get_option('adbwinapi_install_headers_subdir'),
     )
   endif
+endif
+
+if get_option('adbwinapi_generate_sbom')
+  CXX = meson.get_compiler('cpp')
+  _MSC_VER = CXX.get_define('_MSC_VER')
+  _MSC_FULL_VER = CXX.get_define('_MSC_FULL_VER')
+  _ATL_VER = CXX.get_define('_ATL_VER', prefix: '#include <atldef.h>')
+
+  if get_option('adbwinapi_sbom_name') != ''
+    sbom_name = get_option('adbwinapi_sbom_name')
+  else
+    sbom_name = 'AdbWinApi-@0@-sbom.cyclonedx.json'.format(meson.project_version())
+  endif
+
+  extra_args = []
+
+  if get_option('adbwinapi_github_runner_ver') != ''
+    extra_args += ['--github-runner', get_option('adbwinapi_github_runner_ver')]
+  endif
+  if get_option('adbwinapi_sbom_msvc_dev_cmd_ver') != ''
+    extra_args += ['--msvc-dev-cmd', get_option('adbwinapi_sbom_msvc_dev_cmd_ver')]
+  endif
+  if get_option('adbwinapi_sbom_action_gh_release') != ''
+    extra_args += ['--action-gh-release', get_option('adbwinapi_sbom_action_gh_release')]
+  endif
+
+  custom_target(
+    command: [
+      'generate_sbom.py',
+      meson.global_source_root(),
+      'pkg:github/meator/AdbWinApi',
+      meson.project_version(),
+      '${version}',
+      # Beware! The source file (in build_template) contains two
+      # dollar signs. initialize_build_template.py substitutes
+      # these into a single dollar sign.
+      'https://github.com/meator/AdbWinApi/blob/$${ref}/$${path}',
+      'https://github.com/meator/AdbWinApi',
+      host_machine.cpu_family(),
+      host_machine.endian(),
+      meson.version(),
+      CXX.version(),
+      _MSC_VER,
+      _MSC_FULL_VER,
+      _ATL_VER,
+      extra_args,
+    ],
+    capture: true,
+    output: sbom_name,
+    install: true,
+    install_dir: get_option('adbwinapi_sbom_dir'),
+  )
 endif

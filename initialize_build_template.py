@@ -271,5 +271,18 @@ if __name__ == "__main__":
         pathlib.Path("subprojects", "packagefiles", "patch", "meson.build"),
         sourcedir=build_template,
         destdir=dest_dir,
-        mapping={"project_version": project_version, "version": android_tools_version},
+        mapping={
+            "project_version": project_version,
+            "version": android_tools_version,
+        },
+    )
+
+    # Copy SBOM generator script.
+    shutil.copyfile(
+        script_dir / "generate_sbom.py",
+        dest_dir / "subprojects" / "packagefiles" / "patch" / "generate_sbom.py",
+    )
+    shutil.copyfile(
+        script_dir / "source_archive_url.py",
+        dest_dir / "subprojects" / "packagefiles" / "patch" / "source_archive_url.py",
     )
