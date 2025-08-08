@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" version="27.2.0">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" version="28.0.7">
   <diagram name="Page-1" id="HKhyJGKJhishLroQ09m7">
     <mxGraphModel dx="872" dy="469" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -96,7 +96,7 @@
         <mxCell id="5IOgpOtYKzdcHkM1CQEa-36" value="pack it up into a .tar.gz, creating the contents of the Wrap" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="295" y="415" width="200" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="5IOgpOtYKzdcHkM1CQEa-38" value="generate the wrap file using&amp;nbsp;initialize_wrap_build_template.py" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="5IOgpOtYKzdcHkM1CQEa-38" value="generate the wrap file using&amp;nbsp;&lt;code&gt;generate_wrap_file.py&lt;/code&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="11.25" y="415" width="240" height="50" as="geometry" />
         </mxCell>
         <mxCell id="5IOgpOtYKzdcHkM1CQEa-44" value="msys2/adbwinapi is built as internal Wrap. The Wrap is set up by &lt;code&gt;initialize_build_template.py&lt;/code&gt;. This is done to make patching in a meson.build file into msys2/adbwinapi easy (the wrap file has a patch directory) and to apply a few patches which fix compilation failure (using Wrap diff files)." style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
