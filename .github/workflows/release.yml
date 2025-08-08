@@ -224,10 +224,11 @@ jobs:
           body_path: MESSAGE
           # prerelease: true
           draft: true
+          preserve_order: true
           files: |
+            AdbWinApi.wrap
             AdbWinApi-${{ env.PROJECT_VERSION }}.zip
             AdbWinApi-${{ env.PROJECT_VERSION }}-src.zip
-            AdbWinApi.wrap
             AdbWinApi-${{ env.PROJECT_VERSION }}-x86_64-sbom.cyclonedx.json
             AdbWinApi-${{ env.PROJECT_VERSION }}-x86-sbom.cyclonedx.json
             AdbWinApi-${{ env.PROJECT_VERSION }}-aarch64-sbom.cyclonedx.json
