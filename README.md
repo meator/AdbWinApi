@@ -20,6 +20,7 @@ the following additional features:
 
 - transparent build process (release artifacts are built using a [GitHub
   Action](./.github/workflows/release.yml))
+- [generated SBOMs](#software-bill-of-materials) for release artifacts
 - all the nicities of Meson (cross/native files, `compile_commands.json` by default)
   etc.
 - this project is distributed as a Meson Wrap, so everything is handled by this
@@ -120,7 +121,11 @@ Examples:
 ## Deployment process
 Here is a diagram describing the build process during release deployment:
 
+<div align="center">
+
 ![diagram](./etc/Build%20and%20deployment%20process.svg)
+
+</div>
 
 ## Release procedure
 > [!NOTE]
@@ -164,6 +169,30 @@ I suspect that adapting the currently present GitHub action to use
 the older Windows Driver Kit Version would be either difficult or
 impossible. This would mean that I would have to compile and package
 release artifacts manually, which is less transparent and more error-prone.
+
+## Software Bill of Materials
+This project provides a SBOM for prebuilt release artifacts of releases. This
+SBOM is created using a custom written Python script, if you encounter any
+issues with it or if you wish it would include more info, please [create an
+issue](https://github.com/meator/AdbWinApi/issues/new).
+
+Here is the SBOM creation process:
+
+<div align="center">
+
+![diagram](./etc/SBOM%20creation%20process.svg)
+
+</div>
+
+The SBOM creation process is tailored for the current release process of
+[meator/AdbWinApi](https://github.com/meator/AdbWinApi). See the disclaimer
+at top of https://github.com/meator/AdbWinApi/blob/main/generate_sbom.py if
+you want to modify the build process or environment.
+
+The `-src` release ZIP files do not support SBOM generation. You'll either have
+to use GitHub's default release archive or figure out something else. You'll
+likely have to modify the SBOM generation script anyway if your build environment
+differs from the one used in the release GitHub Action.
 
 ## License
 Like [msys2/adbwinapi](https://github.com/msys2/adbwinapi), this repository
