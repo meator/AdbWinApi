@@ -14,15 +14,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Script used to generate Meson .wrap file for AdbWinApi.
+
+This script is used during AdbWinApi's release process. See
+https://github.com/meator/AdbWinApi/blob/main/README.md#deployment-process for more
+info about the build process.
+"""
+
 import argparse
+import hashlib
 import pathlib
 import string
-import hashlib
 
 _buffer_size = 8192
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     parser.add_argument(
         "input_release_archive",
         help=" ".join(

@@ -16,6 +16,7 @@ import argparse
 import sys
 import typing
 
+
 def read_file_with_comments(to_read: typing.TextIO) -> str:
     """Read a file while ignoring # comments.
 
@@ -27,6 +28,7 @@ def read_file_with_comments(to_read: typing.TextIO) -> str:
             continue
         result += line
     return result.strip()
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

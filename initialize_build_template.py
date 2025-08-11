@@ -14,6 +14,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Script used to generate a Meson source directory.
+
+This is a pre-configure step which sets up the Google original platform/development
+source. Its main purpose is to simplify updating AdbWinApi and the original source. To
+do that with this script, edit ANDROID_TOOLS_VERSION.txt and VERSION.txt or override it
+using appropriate flags, and (re)generate the source directory using this script.
+
+Updating original source will most likely require updating the build system in
+build_template/ too.
+
+See https://github.com/meator/AdbWinApi/blob/main/README.md#deployment-process for more
+info about the build process.
+"""
+
 import argparse
 import os
 import pathlib
@@ -37,7 +51,7 @@ source_archive_approximate_size = 262_259_245
 script_dir = pathlib.Path(__file__).parent
 sys.path.insert(1, script_dir.absolute())
 
-import _strip_comments
+import _strip_comments  # noqa: E402
 
 
 def _fetch_with_progress(
@@ -111,7 +125,10 @@ def _substitute_file(
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     parser.add_argument(
         "destination_directory",
         help="Directory into which build_template/ shall be initialized.",
