@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Be careful when using dollar signs ($$) in the original source for this file
+# (in build_template). This file is passed through Python's string.Template by
+# initialize_build_template.py. Even comments are affected.
+
 project(
   'AdbWinApi',
   'cpp',

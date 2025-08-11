@@ -266,11 +266,24 @@ if __name__ == "__main__":
         pathlib.Path("meson.build"),
         sourcedir=build_template,
         destdir=dest_dir,
-        mapping={"project_version": project_version},
+        mapping={
+            "project_version": project_version,
+            "version": android_tools_version,
+        },
     )
     _substitute_file(
         pathlib.Path("subprojects", "packagefiles", "patch", "meson.build"),
         sourcedir=build_template,
         destdir=dest_dir,
-        mapping={"project_version": project_version, "version": android_tools_version},
+        mapping={"project_version": project_version},
+    )
+
+    # Copy SBOM generator script.
+    shutil.copyfile(
+        script_dir / "generate_sbom.py",
+        dest_dir / "generate_sbom.py",
+    )
+    shutil.copyfile(
+        script_dir / "source_archive_url.py",
+        dest_dir / "source_archive_url.py",
     )
