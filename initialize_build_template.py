@@ -41,17 +41,16 @@ import time
 import typing
 import urllib.request
 
-source_archive_url = "https://android.googlesource.com/platform/development.git/+archive/platform-tools-%(version)s.tar.gz"
-# This should be updated when a new version of platform-tools is used.
-# But it is only an approximation and new updates shouldn't change the
-# size of the archive that much.
-source_archive_approximate_size = 262_259_245
-
-
 script_dir = pathlib.Path(__file__).parent
-sys.path.insert(1, script_dir.absolute())
+_orig_path = sys.path.copy()
+try:
+    sys.path.insert(1, str(script_dir.absolute()))
 
-import _strip_comments  # noqa: E402
+    import _strip_comments
+    import source_archive_url
+finally:
+    sys.path = _orig_path
+    del _orig_path
 
 
 def _fetch_with_progress(
@@ -65,7 +64,9 @@ def _fetch_with_progress(
         chunk_size: Download the file in chunks of chunk_size size.
         print_delay: Print progress every print_delay seconds.
     """
-    approximate_size_mib = round(source_archive_approximate_size / 2**20)
+    approximate_size_mib = round(
+        source_archive_url.source_archive_approximate_size / 2**20
+    )
     fetched_size = 0
     log_delay = time.monotonic()
     with urllib.request.urlopen(url) as response:
@@ -80,7 +81,10 @@ def _fetch_with_progress(
             if (new_log_delay - log_delay) >= print_delay:
                 log_delay = new_log_delay
                 progress = round(
-                    fetched_size / source_archive_approximate_size * 100, 1
+                    fetched_size
+                    / source_archive_url.source_archive_approximate_size
+                    * 100,
+                    1,
                 )
                 progress_str = f"~{progress}"
                 fetched_size_mib = round(fetched_size / 2**20)
@@ -180,7 +184,7 @@ if __name__ == "__main__":
 
     # Fetch source into cache/ if not cached already.
 
-    url = source_archive_url % {"version": android_tools_version}
+    url = source_archive_url.source_archive_url % {"version": android_tools_version}
 
     cache_filename = url[url.rfind("/") + 1 :]
     cache_dir = script_dir / "cache"
@@ -231,7 +235,9 @@ if __name__ == "__main__":
 
     # Copy template to target directory.
 
-    shutil.copytree(script_dir / "build_template", dest_dir, dirs_exist_ok=True)
+    build_template = script_dir / "build_template"
+
+    shutil.copytree(build_template, dest_dir, dirs_exist_ok=True)
 
     packagefiles_dir = dest_dir / "subprojects" / "packagefiles"
 
@@ -249,8 +255,6 @@ if __name__ == "__main__":
                 os.path.relpath(cache_path, packagefiles_dir),
                 packagefiles_dir / cache_filename,
             )
-
-    build_template = script_dir / "build_template"
 
     _substitute_file(
         pathlib.Path("subprojects", "development.wrap"),
