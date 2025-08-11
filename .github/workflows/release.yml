@@ -21,15 +21,33 @@ on:
 
 env:
   meson_version: 1.8.2
+  # NOTE: Please keep these versions up-to-date with the versions used in
+  # uses: below! uses key does not support substitution, so a Write Every Time
+  # approach must be used.
+  # v1.13.0
+  msvc_dev_cmd_version: 0b201ec74fa43914dc39ae48a89fd1d8cb592756
+  # v2.3.2
+  action_gh_release_version: 72f2c25fcb47643c292f7107632f7a47c1df5cd8
 
 jobs:
   Release:
-    runs-on: windows-2022
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # To my knowledge, this is the only "Don't Repeat Yourself" way to be able
+      # to access the value of runs-on in the job and also be able to actually use
+      # it in runs-on.
+      # runs-on doesn't have access to env context object, so it can't be
+      # decoupled that way.
+      matrix:
+        os: [windows-2022]
     permissions:
       contents: write
+    env:
+      runs_on: ${{ matrix.os }}
     steps:
       - name: Install Meson
-        run: pipx install meson==$env:meson_version
+        # The generate_sbom.py script needs Python >=3.11
+        run: pipx install meson==$env:meson_version --python python3.11
       - uses: actions/checkout@v4
       - name: Fetch the target tag
         shell: bash
@@ -68,6 +86,12 @@ jobs:
           -Dlibdir=x86_64
           -Dbindir=x86_64
           -Dincludedir=include\host\windows\usb\api
+          -Dgenerate_sbom=true
+          -Dsbom_dir=x86_64
+          -Dsbom_name="AdbWinApi-$env:PROJECT_VERSION-x86_64-sbom.cyclonedx.json"
+          -Dgithub_runner_ver="$env:runs_on"
+          -Dsbom_msvc_dev_cmd_ver="$env:msvc_dev_cmd_version"
+          -Dsbom_action_gh_release="$env:action_gh_release_version"
       - name: Build AdbWinApi (x86-64 64bit)
         run: meson compile -C build-x86-64
       - name: Install AdbWinApi (x86-64 64bit)
@@ -88,6 +112,12 @@ jobs:
           --cross-file 'crossfiles\x86 (32bit).ini'
           --cross-file release_install_native.ini
           -Ddevelopment:adbwinapi_install_headers=false
+          -Dgenerate_sbom=true
+          -Dsbom_dir=""
+          -Dsbom_name="AdbWinApi-$env:PROJECT_VERSION-x86-sbom.cyclonedx.json"
+          -Dgithub_runner_ver="$env:runs_on"
+          -Dsbom_msvc_dev_cmd_ver="$env:msvc_dev_cmd_version"
+          -Dsbom_action_gh_release="$env:action_gh_release_version"
       - name: Build AdbWinApi (x86 32bit)
         run: meson compile -C build-x86
       - name: Install AdbWinApi (x86 32bit)
@@ -107,6 +137,12 @@ jobs:
           --cross-file 'crossfiles\ARM64 (aarch64).ini'
           --cross-file release_install_native.ini
           -Ddevelopment:adbwinapi_install_headers=false
+          -Dgenerate_sbom=true
+          -Dsbom_dir=""
+          -Dsbom_name="AdbWinApi-$env:PROJECT_VERSION-aarch64-sbom.cyclonedx.json"
+          -Dgithub_runner_ver="$env:runs_on"
+          -Dsbom_msvc_dev_cmd_ver="$env:msvc_dev_cmd_version"
+          -Dsbom_action_gh_release="$env:action_gh_release_version"
       - name: Build AdbWinApi (ARM64 aarch64)
         run: meson compile -C build-aarch64
       - name: Install AdbWinApi (ARM64 aarch64)
@@ -126,12 +162,30 @@ jobs:
           Copy-Item -Path LICENSE -Destination AdbWinApi-$env:PROJECT_VERSION-src
           Copy-Item -Path NOTICE  -Destination AdbWinApi-$env:PROJECT_VERSION-src
 
+      - name: Separate SBOM files
+        run: |
+          Move-Item -Path AdbWinApi-$env:PROJECT_VERSION\x86_64\AdbWinApi-$env:PROJECT_VERSION-x86_64-sbom.cyclonedx.json   -Destination .
+          Move-Item -Path AdbWinApi-$env:PROJECT_VERSION\x86\AdbWinApi-$env:PROJECT_VERSION-x86-sbom.cyclonedx.json         -Destination .
+          Move-Item -Path AdbWinApi-$env:PROJECT_VERSION\aarch64\AdbWinApi-$env:PROJECT_VERSION-aarch64-sbom.cyclonedx.json -Destination .
+
       - name: Initialize wrap build template
         run: python initialize_wrap_build_template.py AdbWinApi-$env:PROJECT_VERSION
       - name: Create release archive
         run: Compress-Archive AdbWinApi-$env:PROJECT_VERSION AdbWinApi-$env:PROJECT_VERSION.zip
       - name: Create source archive
         run: Compress-Archive AdbWinApi-$env:PROJECT_VERSION-src AdbWinApi-$env:PROJECT_VERSION-src.zip
+
+      - name: Finalize SBOM files
+        shell: bash
+        env:
+          REPO_NAME: ${{ github.repository }}
+        run: |
+          for arch in x86_64 x86 aarch64; do
+            python3 ./finalize_sbom.py AdbWinApi-$PROJECT_VERSION.zip \
+             "https://github.com/$REPO_NAME/releases/download/$PROJECT_VERSION/AdbWinApi-$PROJECT_VERSION.zip" \
+             AdbWinApi-$PROJECT_VERSION-$arch-sbom.cyclonedx.json
+          done
+
       - name: Generate wrap file
         run: python generate_wrap_file.py AdbWinApi-$env:PROJECT_VERSION.zip AdbWinApi.wrap
       - name: Convert wrap file to LF from CRLF
@@ -139,10 +193,16 @@ jobs:
         run: dos2unix AdbWinApi.wrap
       - name: Generate SHA256SUM.txt
         shell: bash
-        run: sha256sum --binary AdbWinApi-$PROJECT_VERSION.zip AdbWinApi-$PROJECT_VERSION-src.zip AdbWinApi.wrap > SHA256SUM.txt
+        run: >
+          sha256sum --binary AdbWinApi-$PROJECT_VERSION.zip AdbWinApi-$PROJECT_VERSION-src.zip
+          AdbWinApi.wrap AdbWinApi-$PROJECT_VERSION-x86_64-sbom.cyclonedx.json
+          AdbWinApi-$PROJECT_VERSION-x86-sbom.cyclonedx.json
+          AdbWinApi-$PROJECT_VERSION-aarch64-sbom.cyclonedx.json > SHA256SUM.txt
 
       - name: Generate release message
         shell: bash
+        env:
+          REPO_NAME: ${{ github.repository }}
         run: |
           {
             git for-each-ref --format='%(contents:body)' "$GITHUB_REF"
@@ -159,6 +219,10 @@ jobs:
             head -n1 msvc_aarch64.txt
             printf "Meson version:       $meson_version\n"
             echo '```'
+            echo
+            echo -n "See the Software Bill of Materials files for "
+            echo -n "a more authoritative description of the build environment. "
+            echo "See also [the README](https://github.com/$REPO_NAME/blob/main/README.md#software-bill-of-materials)."
           } > MESSAGE
 
       - name: Create GitHub Release
@@ -172,4 +236,7 @@ jobs:
             AdbWinApi-${{ env.PROJECT_VERSION }}.zip
             AdbWinApi-${{ env.PROJECT_VERSION }}-src.zip
             AdbWinApi.wrap
+            AdbWinApi-${{ env.PROJECT_VERSION }}-x86_64-sbom.cyclonedx.json
+            AdbWinApi-${{ env.PROJECT_VERSION }}-x86-sbom.cyclonedx.json
+            AdbWinApi-${{ env.PROJECT_VERSION }}-aarch64-sbom.cyclonedx.json
             SHA256SUM.txt
